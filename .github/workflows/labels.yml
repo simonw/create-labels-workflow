@@ -25,8 +25,8 @@ jobs:
           const labels = JSON.parse(process.env.LABELS_JSON);
           for (const label of labels) {
             github.rest.issues.createLabel({
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               name: label.name,
               color: label.color
             });
