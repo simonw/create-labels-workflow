@@ -25,11 +25,21 @@ jobs:
         script: |
           const labels = JSON.parse(process.env.LABELS_JSON);
           for (const label of labels) {
-            github.rest.issues.createLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: label.name,
-              description: label.description,
-              color: label.color
-            });
+            try {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label.name,
+                description: label.description, // Make sure your LABELS_JSON env variable includes 'description' for each label
+                color: label.color
+              });
+            } catch (error) {
+              // Check if the error is because the label already exists
+              if (error.status === 422) {
+                console.log(`Label '${label.name}' already exists. Skipping.`);
+              } else {
+                // Log other errors
+                console.error(`Error creating label '${label.name}': ${error}`);
+              }
+            }
           }
