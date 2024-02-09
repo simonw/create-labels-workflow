@@ -31,7 +31,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 name: label.name,
-                description: label.description, // Make sure your LABELS_JSON env variable includes 'description' for each label
+                description: label.description || '',
                 color: label.color
               });
             } catch (error) {
